@@ -1,4 +1,7 @@
 import logging
+import grpc
+from person_api import person_pb2
+from person_api import person_pb2_grpc
 from datetime import datetime, timedelta
 from typing import Dict, List
 
@@ -7,6 +10,9 @@ from app.udaconnect.models import Connection, Location, Person
 from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
+
+channel = grpc.insecure_channel("person-service:5005")
+person_stub = person_pb2_grpc.PersonServiceStub(channel)
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
@@ -113,22 +119,23 @@ class LocationService:
 
 class PersonService:
     @staticmethod
-    def create(person: Dict) -> Person:
-        new_person = Person()
-        new_person.first_name = person["first_name"]
-        new_person.last_name = person["last_name"]
-        new_person.company_name = person["company_name"]
-
-        db.session.add(new_person)
-        db.session.commit()
-
-        return new_person
-
-    @staticmethod
-    def retrieve(person_id: int) -> Person:
-        person = db.session.query(Person).get(person_id)
+    def retrieve_with_id(person_id):
+        requestMessage = person_pb2.PersonRequestMessage(id=person_id)
+        person = person_stub.Retrieve(requestMessage)
         return person
 
-    @staticmethod
-    def retrieve_all() -> List[Person]:
-        return db.session.query(Person).all()
+
+    def retrieve_all():
+        requestMessage = person_pb2.PersonRequestMessage()
+        persons = person_stub.RetrieveAll(requestMessage)
+        return persons
+
+
+    def create(data):
+        person_message = person_pb2.personmessage(
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            company_name=data['company_name']
+        )
+        new_person_create= person_stub.Create(person_message)
+        return new_person_create
