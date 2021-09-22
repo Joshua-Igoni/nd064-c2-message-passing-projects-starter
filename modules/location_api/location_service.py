@@ -1,4 +1,4 @@
-from app.repository.location_repository import create
+from location_api.location_writer import create
 
 
 def create_location(location_data):
