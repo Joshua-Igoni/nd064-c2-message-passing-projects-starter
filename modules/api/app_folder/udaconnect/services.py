@@ -1,14 +1,16 @@
+import json
 import logging
-import grpc
-from person_api import person_pb2
-from person_api import person_pb2_grpc
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from app import db
-from app.udaconnect.models import Connection, Location, Person
-from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
+import grpc
+from app_folder import db
+from app_folder.udaconnect.models import Connection, Location, Person
+from app_folder.udaconnect.schemas import (ConnectionSchema, LocationSchema,
+                                    PersonSchema)
 from geoalchemy2.functions import ST_AsText, ST_Point
+from kafka import KafkaProducer
+from person_api import person_pb2, person_pb2_grpc
 from sqlalchemy.sql import text
 
 channel = grpc.insecure_channel("person-service:5005")
@@ -16,6 +18,11 @@ person_stub = person_pb2_grpc.PersonServiceStub(channel)
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("LocationService")
+
+producer = KafkaProducer(bootstrap_servers=['kafka-service:9092'])
 
 
 class ConnectionService:
@@ -89,33 +96,12 @@ class ConnectionService:
 
 class LocationService:
     @staticmethod
-    def retrieve(location_id) -> Location:
-        location, coord_text = (
-            db.session.query(Location, Location.coordinate.ST_AsText())
-            .filter(Location.id == location_id)
-            .one()
-        )
 
-        # Rely on database to return text form of point to reduce overhead of conversion in app code
-        location.wkt_shape = coord_text
-        return location
-
-    @staticmethod
-    def create(location: Dict) -> Location:
-        validation_results: Dict = LocationSchema().validate(location)
-        if validation_results:
-            logger.warning(f"Unexpected data format in payload: {validation_results}")
-            raise Exception(f"Invalid payload: {validation_results}")
-
-        new_location = Location()
-        new_location.person_id = location["person_id"]
-        new_location.creation_time = location["creation_time"]
-        new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
-        db.session.add(new_location)
-        db.session.commit()
-
-        return new_location
-
+    def send_location(location_data):
+        #this sends data to the kafka topic 'location'
+        logger.info(location_data)
+        producer.send('location', json.dumps(location_data).encode('utf-8'))
+        producer.flush()
 
 class PersonService:
     @staticmethod
