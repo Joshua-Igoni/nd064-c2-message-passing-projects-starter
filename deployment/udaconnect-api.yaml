@@ -31,7 +31,7 @@ spec:
         service: udaconnect-api
     spec:
       containers:
-      - image: joshbolten/nd064-udaconnect-api:latest
+      - image: joshbolten/udaconnect_api:latest
         name: udaconnect-api
         imagePullPolicy: Always
         env:
