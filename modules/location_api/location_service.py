@@ -1,4 +1,4 @@
-from location_api.location_writer import create
+from location_writer import create
 
 
 def create_location(location_data):
