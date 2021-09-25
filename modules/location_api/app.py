@@ -4,7 +4,7 @@ import sys
 import time
 
 from kafka import KafkaConsumer
-from api.app_folder.udaconnect.services import create_location
+from location_service import create_location
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("location-service")
