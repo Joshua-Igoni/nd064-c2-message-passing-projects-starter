@@ -10,10 +10,10 @@ from app_folder.udaconnect.schemas import (ConnectionSchema, LocationSchema,
                                     PersonSchema)
 from geoalchemy2.functions import ST_AsText, ST_Point
 from kafka import KafkaProducer
-from person_api import person_pb2, person_pb2_grpc
+from app_folder.udaconnect import person_pb2, person_pb2_grpc
 from sqlalchemy.sql import text
 
-channel = grpc.insecure_channel("person-service:5005")
+channel = grpc.insecure_channel("person-service:4000")
 person_stub = person_pb2_grpc.PersonServiceStub(channel)
 
 logging.basicConfig(level=logging.WARNING)
