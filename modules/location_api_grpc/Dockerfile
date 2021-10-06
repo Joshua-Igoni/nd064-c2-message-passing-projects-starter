@@ -15,6 +15,6 @@ COPY . /app
 
 RUN python -m grpc_tools.protoc -I./ --python_out=./ --grpc_python_out=./ location.proto
 
-EXPOSE 5005
+EXPOSE 6000
 
 CMD ["python", "main.py"]

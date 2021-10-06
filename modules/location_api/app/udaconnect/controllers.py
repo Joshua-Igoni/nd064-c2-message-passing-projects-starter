@@ -16,6 +16,9 @@ KAFKA_HOST = os.environ["KAFKA_HOST"]
 producer = KafkaProducer(bootstrap_servers=[f'{KAFKA_HOST}:{KAFKA_PORT}'],
                          value_serializer=lambda x: 
                          dumps(x).encode('utf-8'))
+                         
+
+
 
 DATE_FORMAT = "%Y-%m-%d"
 KAFKA_TOPIC = os.environ["KAFKA_TOPIC"]

@@ -4,12 +4,14 @@ import location_pb2_grpc
 from datetime import datetime
 
 """
-Sample implementation of a writer that can be used to write messages to gRPC.
+A writer that writes messages to gRPC.
 """
 
 print("Sending sample payload...")
 
-channel = grpc.insecure_channel("localhost:5005")
+
+
+channel = grpc.insecure_channel("localhost:6000")
 stub = location_pb2_grpc.LocationServiceStub(channel)
 
 # Update this with desired payload

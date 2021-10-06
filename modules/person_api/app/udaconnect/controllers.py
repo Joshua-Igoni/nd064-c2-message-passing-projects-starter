@@ -22,8 +22,8 @@ class PersonsResource(Resource):
     def post(self) -> Person:
         try:
             payload = request.get_json()
-            new_person: Person = PersonService.create(payload)
-            return new_person
+            new_person_data: Person = PersonService.create(payload)
+            return new_person_data
         except Exception as e:
             return {"error": str(e)}, 400
 

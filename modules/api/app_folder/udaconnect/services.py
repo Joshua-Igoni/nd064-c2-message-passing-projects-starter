@@ -12,7 +12,7 @@ logger = logging.getLogger("udaconnect-api")
 
 class ConnectionService:
     @staticmethod
-    def find_contacts(person_id: int, start_date: datetime, end_date: datetime, meters=5
+    def find_connections(person_id: int, start_date: datetime, end_date: datetime, meters=5
     ) -> List[Connection]:
         """
         Finds all Person who have been within a given distance of a given Person within a date range.

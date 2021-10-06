@@ -39,7 +39,7 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
 
 
     def Create(self, request, context):
-        logging.info("Received a message!")
+        logging.info("message recieved!")
 
         request_value = {
             "id": request.id,
@@ -53,10 +53,9 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
         try:
             producer.send(KAFKA_TOPIC, request_value)
         
-            logging.info("Location Stored in Kafka!")
+            logging.info("The location is now Stored in Kafka!")
             return location_pb2.LocationSchema(**request_value)
         except Exception as e:
-            logging.info("An error occured")
             logging.error("Exception occured: {}".format(e))
             return location_pb2.LocationSchema(**{
                 "id": None,
@@ -72,8 +71,8 @@ server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
 location_pb2_grpc.add_LocationServiceServicer_to_server(LocationServicer(), server)
 
 
-logging.info("Server starting on port 5005...")
-server.add_insecure_port("[::]:5005")
+logging.info("Server starting on port 6000...")
+server.add_insecure_port("[::]:6000")
 server.start()
 # Keep thread alive
 try:

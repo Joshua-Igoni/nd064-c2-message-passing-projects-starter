@@ -17,15 +17,15 @@ logger = logging.getLogger("udaconnect-api")
 class PersonService:
     @staticmethod
     def create(person: Dict) -> Person:
-        new_person = Person()
-        new_person.first_name = person["first_name"]
-        new_person.last_name = person["last_name"]
-        new_person.company_name = person["company_name"]
+        new_person_data = Person()
+        new_person_data.first_name = person["first_name"]
+        new_person_data.last_name = person["last_name"]
+        new_person_data.company_name = person["company_name"]
 
-        db.session.add(new_person)
+        db.session.add(new_person_data)
         db.session.commit()
 
-        return new_person
+        return new_person_data
 
 
     @staticmethod
