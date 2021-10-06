@@ -1,26 +1,38 @@
 from __future__ import annotations
+import os
+from sqlalchemy import create_engine, func
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
 
 from dataclasses import dataclass
 from datetime import datetime
 
-from app_folder import db  # noqa
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
 from shapely.geometry.point import Point
-from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 
+DB_USERNAME = os.environ["DB_USERNAME"]
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+DB_HOST = os.environ["DB_HOST"]
+DB_PORT = os.environ["DB_PORT"]
+DB_NAME = os.environ["DB_NAME"]
 
-class Person(db.Model):
+engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+Base = declarative_base()
+
+class Person(Base):
     __tablename__ = "person"
 
     id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     company_name = Column(String, nullable=False)
-
-
-class Location(db.Model):
+    
+class Location(Base):
     __tablename__ = "location"
 
     id = Column(BigInteger, primary_key=True)
@@ -57,7 +69,6 @@ class Location(db.Model):
         return coord_text[coord_text.find("(") + 1 : coord_text.find(" ")]
 
 
-@dataclass
-class Connection:
-    location: Location
-    person: Person
+
+Session = sessionmaker(bind=engine)
+session = Session()
