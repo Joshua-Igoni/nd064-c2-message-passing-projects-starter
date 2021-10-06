@@ -1,12 +1,11 @@
 from __future__ import annotations
-from sqlalchemy.ext.declarative import declarative_base
+
+from app import db
+from sqlalchemy import Column, Integer, String
 
 from sqlalchemy import Column, Integer, String
 
-BaseModel = declarative_base()
-
-
-class Person(BaseModel):
+class Person(db.Model):
     __tablename__ = "person"
 
     id = Column(Integer, primary_key=True)
