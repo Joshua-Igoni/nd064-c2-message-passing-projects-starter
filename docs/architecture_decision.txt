@@ -1,0 +1,19 @@
+The app is divided into;
+kafka cluster
+location grpc
+the rest APIs:
+person api
+location api
+connection api
+
+The kafka cluster is used to accomodate large volumes of data that may be generated from
+either the location_grpc or/and location api through the users of the application. And also to store the data in such a manner that 
+applications reading the data will not experience any lagging or downtime.
+
+The locations grpc basically helps in the performance of the application by increasing speed of 
+proccessing.
+
+The location api will serve along side the location grpc to accomodate the choices of different consumers.
+and also the person api and connection api will serve there purpose as restful APIs since the company is running 
+on a limited budget. it wouldnt be cost effective to over design at this point.
+

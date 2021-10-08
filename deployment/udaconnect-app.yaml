@@ -31,8 +31,8 @@ spec:
         service: udaconnect-app
     spec:
       containers:
-      - image: joshbolten/frontend_udaconnect:latest
-        name: udaconnect-app
+      - image: joshbolten/udaconnect_frontend:latest
+        name: udaconnect_frontend
         imagePullPolicy: Always
         resources:
           requests:
