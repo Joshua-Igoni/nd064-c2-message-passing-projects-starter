@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: location_consumer_service
-  name: location_consumer_service
+    service: location-consumer
+  name: location-consumer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: location_consumer_service
+      service: location-consumer
   template:
     metadata:
       labels:
-        service: location_consumer_service
+        service: location-consumer
     spec:
       containers:
       - image: joshbolten/api-location_consumer:latest
-        name: location_consumer
+        name: location-consumer
         imagePullPolicy: Always
         env:
         - name: DB_USERNAME

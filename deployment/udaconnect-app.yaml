@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - image: joshbolten/udaconnect_frontend:latest
-        name: udaconnect_frontend
+        name: udaconnect-app
         imagePullPolicy: Always
         resources:
           requests:

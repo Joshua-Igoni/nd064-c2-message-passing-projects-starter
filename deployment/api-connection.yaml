@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: api_connection_service
-  name: api_connection_service
+    service: api-connection-rest
+  name: api-connection-rest
 spec:
   ports:
   - name: "5000"
@@ -11,28 +11,28 @@ spec:
     targetPort: 5000
     nodePort: 30002
   selector:
-    service: api_connection_service
+    service: api-connection-rest
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: api_connection_service
-  name: api_connection_service
+    service: api-connection-rest
+  name: api-connection-rest
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: api_connection_service
+      service: api-connection-rest
   template:
     metadata:
       labels:
-        service: api_connection_service
+        service: api-connection-rest
     spec:
       containers:
       - image: joshbolten/api_connection:latest
-        name: api_connection
+        name: api-connection-rest
         imagePullPolicy: Always
         env:
         - name: DB_USERNAME
